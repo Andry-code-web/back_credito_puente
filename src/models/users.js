@@ -39,18 +39,29 @@ class User {
 
     static async update(id, user) {
 
-        const hashedPassword = await bcrypt.hash(user.password, 10);
+        let query = `
+        UPDATE users 
+        SET nombre = ?, email = ?, rol = ?
+    `;
 
-        await db.execute(
-            "UPDATE users SET nombre = ?, email = ?, password = ?, rol = ? WHERE id = ?",
-            [
-                user.nombre,
-                user.email,
-                hashedPassword,
-                user.rol,
-                id
-            ]
-        );
+        let params = [
+            user.nombre,
+            user.email,
+            user.rol
+        ];
+
+        if (user.password) {
+
+            const hashedPassword = await bcrypt.hash(user.password, 10);
+
+            query += ", password = ?";
+            params.push(hashedPassword);
+        }
+
+        query += " WHERE id = ?";
+        params.push(id);
+
+        await db.execute(query, params);
     }
 
     static async delete(id) {

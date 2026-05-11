@@ -16,7 +16,7 @@ class UserController {
 
     static async getUserById(req, res) {
         try {
-            const user = await User.findByPk(req.params.id);
+            const user = await User.findById(req.params.id);
 
             res.json(user)
         } catch (error) {
@@ -41,29 +41,31 @@ class UserController {
     }
 
     static async updateUser(req, res) {
+
         try {
-            const user = await User.update(req.body, {
-                where: {
-                    id: req.params.id
-                }
+
+            const id = req.params.id;
+            const user = req.body;
+
+            await User.update(id, user);
+
+            res.json({
+                message: "Usuario actualizado"
             });
 
-            res.json(user)
         } catch (error) {
+
             res.status(500).json({
                 message: "Error al actualizar usuario",
                 error: error.message
             });
+
         }
     }
 
     static async deleteUser(req, res) {
         try {
-            const user = await User.destroy({
-                where: {
-                    id: req.params.id
-                }
-            });
+            const user = await User.delete(req.params.id);
 
             res.json(user)
         } catch (error) {
