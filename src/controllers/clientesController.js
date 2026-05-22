@@ -16,7 +16,8 @@ class ClientesController {
 
     static async getById(req, res) {
         try {
-            const cliente = await Cliente.getById(req.params.id);
+            const { id } = req.params;
+            const cliente = await Cliente.getById(id);
 
             res.json(cliente)
         } catch (error) {
@@ -30,12 +31,16 @@ class ClientesController {
     static async create(req, res) {
         try {
             const cliente = req.body;
+            const asesor_id = req.session?.user?.id || req.body.creado_por || 1;
 
-            const id = await Cliente.create(cliente);
+            console.log(cliente);
+            console.log(asesor_id);
+
+
+            await Cliente.create(cliente, asesor_id);
 
             res.status(201).json({
-                message: "Cliente creado",
-                id
+                message: "Cliente creado"
             });
         } catch (error) {
             res.status(500).json({
@@ -53,8 +58,7 @@ class ClientesController {
             await Cliente.update(id, cliente);
 
             res.json({
-                message: "Cliente actualizado",
-                id
+                message: "Cliente actualizado"
             })
         } catch (error) {
             res.status(500).json({
@@ -66,9 +70,11 @@ class ClientesController {
 
     static async delete(req, res) {
         try {
-            const cliente = await Cliente.delete(req.params.id);
+            await Cliente.delete(req.params.id);
 
-            res.json(cliente)
+            res.json({
+                message: "Cliente eliminado"
+            })
         } catch (error) {
             res.status(500).json({
                 message: "Error al eliminar cliente",

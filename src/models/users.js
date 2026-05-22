@@ -5,7 +5,7 @@ class User {
 
     static async findAll() {
         const [rows] = await db.execute(
-            "SELECT * FROM users"
+            "SELECT * FROM usuarios"
         );
 
         return rows;
@@ -13,7 +13,7 @@ class User {
 
     static async findById(id) {
         const [rows] = await db.execute(
-            "SELECT * FROM users WHERE id = ?",
+            "SELECT * FROM usuarios WHERE id = ?",
             [id]
         );
 
@@ -25,12 +25,16 @@ class User {
         const hashedPassword = await bcrypt.hash(user.password, 10);
 
         const [result] = await db.execute(
-            "INSERT INTO users (nombre, email, password, rol, activo, created_at) VALUES (?, ?, ?, ?, 1, NOW())",
+            "INSERT INTO usuarios (nombre, correo, password, usuario, rol, celular, agencia, is_active, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
             [
                 user.nombre,
-                user.email,
+                user.correo,
                 hashedPassword,
-                user.rol
+                user.usuario,
+                user.rol,
+                user.celular,
+                user.agencia,
+                user.is_active
             ]
         );
 
@@ -40,18 +44,28 @@ class User {
     static async update(id, user) {
 
         let query = `
-        UPDATE users 
-        SET nombre = ?, email = ?, rol = ?
+        UPDATE usuarios 
+        SET nombre = ?, 
+            correo = ?, 
+            usuario = ?, 
+            rol = ?, 
+            celular = ?, 
+            agencia = ?, 
+            is_active = ?, 
+            updated_at = NOW()
     `;
 
         let params = [
             user.nombre,
-            user.email,
-            user.rol
+            user.correo,
+            user.usuario,
+            user.rol,
+            user.celular,
+            user.agencia,
+            user.is_active
         ];
 
         if (user.password) {
-
             const hashedPassword = await bcrypt.hash(user.password, 10);
 
             query += ", password = ?";
@@ -67,7 +81,7 @@ class User {
     static async delete(id) {
 
         await db.execute(
-            "UPDATE users SET activo = 0 WHERE id = ?",
+            "DELETE FROM usuarios WHERE id = ?",
             [id]
         );
     }

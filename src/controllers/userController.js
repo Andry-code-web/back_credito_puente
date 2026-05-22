@@ -29,9 +29,11 @@ class UserController {
 
     static async createUser(req, res) {
         try {
-            const user = await User.create(req.body);
+            await User.create(req.body);
 
-            res.json(user)
+            res.json({
+                message: "Usuario creado"
+            })
         } catch (error) {
             res.status(500).json({
                 message: "Error al crear usuario",
@@ -65,9 +67,11 @@ class UserController {
 
     static async deleteUser(req, res) {
         try {
-            const user = await User.delete(req.params.id);
+            await User.delete(req.params.id);
 
-            res.json(user)
+            res.json({
+                message: "Usuario eliminado"
+            })
         } catch (error) {
             res.status(500).json({
                 message: "Error al eliminar usuario",
