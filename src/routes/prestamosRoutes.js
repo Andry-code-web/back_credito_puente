@@ -5,6 +5,8 @@ const PrestamosController = require('../controllers/prestamosController');
 
 router.get("/", PrestamosController.getPrestamos);
 router.get("/:id", PrestamosController.getPrestamoById);
+router.get("/:id/pdf", PrestamosController.generatePDF);
+router.post("/pdf-simulacion", PrestamosController.generateSimulationPDF);
 router.post("/", PrestamosController.createPrestamo);
 router.patch("/:id/status", PrestamosController.updateStatus);
 

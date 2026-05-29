@@ -22,10 +22,29 @@ class User {
 
     static async create(user) {
 
-        const hashedPassword = await bcrypt.hash(user.password, 10);
+        // Encriptar SOLO AQUÍ
+        const hashedPassword = await bcrypt.hash(
+            user.password,
+            10
+        );
 
         const [result] = await db.execute(
-            "INSERT INTO usuarios (nombre, correo, password, usuario, rol, celular, agencia, is_active, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+            `
+        INSERT INTO usuarios
+        (
+            nombre,
+            correo,
+            password,
+            usuario,
+            rol,
+            celular,
+            agencia,
+            is_active,
+            created_at,
+            updated_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+        `,
             [
                 user.nombre,
                 user.correo,

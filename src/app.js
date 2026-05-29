@@ -11,6 +11,7 @@ const inversoresRoutes = require('./routes/inversoresRoutes');
 const simulacionRoutes = require('./routes/simulacionRoutes');
 const prestamosRoutes = require('./routes/prestamosRoutes');
 const cuotasRoutes = require('./routes/cuotasRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 app.use(express.json());
 app.use(morgan('dev'));
@@ -22,6 +23,7 @@ app.use('/inversores', inversoresRoutes);
 app.use('/simulacion', simulacionRoutes);
 app.use('/prestamos', prestamosRoutes);
 app.use('/cuotas', cuotasRoutes);
+app.use('/auth', authRoutes);
 
 
 app.listen(PORT, () => {
